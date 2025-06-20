@@ -4,6 +4,7 @@ import '../models/restaurant.dart';
 import '../models/avis.dart';
 
 class ApiService {
+  // Remplace par l'IP locale de ta machine si tu utilises un émulateur ou un vrai appareil
   static const String baseUrl = "http://127.0.0.1:8000/api";
 
   /// Récupère la liste des restaurants
@@ -18,31 +19,41 @@ class ApiService {
     }
   }
 
-  /// Met à jour un restaurant
+  /// Met à jour un restaurant sans authentification ni CSRF
   Future<void> updateRestaurant(Restaurant r) async {
     final url = Uri.parse('$baseUrl/restaurants/${r.id}');
     final response = await http.put(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',  // Important pour recevoir du JSON en réponse
+      },
       body: jsonEncode({
         'nom': r.nom,
         'description': r.description,
-        // ajoute d'autres champs si besoin
+        'prix_moyen': r.prixMoyen,
+        'latitude': r.latitude,
+        'longitude': r.longitude,
+        'contact_nom': r.contactNom,
+        'contact_email': r.contactEmail,
       }),
     );
 
     if (response.statusCode != 200) {
       final error = jsonDecode(response.body);
-      throw Exception(error['message'] ?? 'Erreur mise à jour restaurant');
+      throw Exception(error['message'] ?? 'Erreur lors de la mise à jour du restaurant');
     }
   }
 
-  /// Met à jour un avis
+  /// Met à jour un avis sans authentification ni CSRF
   Future<void> updateAvis(Avis a) async {
     final url = Uri.parse('$baseUrl/avis/${a.id}');
     final response = await http.put(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',  // Important pour recevoir du JSON en réponse
+      },
       body: jsonEncode({
         'note': a.note,
         'commentaire': a.commentaire,
@@ -51,7 +62,7 @@ class ApiService {
 
     if (response.statusCode != 200) {
       final error = jsonDecode(response.body);
-      throw Exception(error['message'] ?? 'Erreur mise à jour avis');
+      throw Exception(error['message'] ?? 'Erreur lors de la mise à jour de l\'avis');
     }
   }
 }

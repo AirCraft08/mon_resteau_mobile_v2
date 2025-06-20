@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../models/avis.dart';
 import '../services/api_service.dart';
 
@@ -24,9 +25,9 @@ class _EditAvisScreenState extends State<EditAvisScreen> {
 
   void _save() async {
     int note = int.tryParse(noteController.text) ?? 0;
-    if (note < 0 || note > 5) {
+    if (note < 1 || note > 5) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Note doit être entre 0 et 5')),
+        const SnackBar(content: Text('La note doit être entre 1 et 5')),
       );
       return;
     }
@@ -46,7 +47,7 @@ class _EditAvisScreenState extends State<EditAvisScreen> {
       Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erreur lors de la mise à jour')),
+        SnackBar(content: Text('Erreur lors de la mise à jour : $e')),
       );
     }
   }
@@ -62,7 +63,7 @@ class _EditAvisScreenState extends State<EditAvisScreen> {
             TextField(
               controller: noteController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Note (0-5)'),
+              decoration: const InputDecoration(labelText: 'Note (1-5)'),
             ),
             TextField(
               controller: commentaireController,

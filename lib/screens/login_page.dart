@@ -19,24 +19,23 @@ class _LoginPageState extends State<LoginPage> {
     final email = emailController.text.trim();
     final password = passwordController.text;
 
-    // Ici tu peux ajouter la vraie logique API d’authentification
-    // Pour l’instant, simule que temp1@test.com avec n’importe quel mdp est userId 207
-    // Sinon userId 1 (admin)
-
+    // TODO : Remplacer cette simulation par un appel réel à ton API d’authentification
     int userId = 1;
     String username = 'Admin';
+    String token = 'token_simulé_pour_tests'; // Simule un token
 
     if (email == 'temp1@test.com') {
       userId = 207;
       username = 'temp1';
+      token = 'token_temp1';
     } else if (email.isNotEmpty) {
       username = email;
     }
 
-    // Mise à jour du provider
-    Provider.of<UserProvider>(context, listen: false).login(userId, username);
+    // Met à jour le provider avec l’identifiant, le nom et le token
+    Provider.of<UserProvider>(context, listen: false).login(userId, username, token);
 
-    // Navigation vers la liste des restaurants
+    // Navigue vers la liste des restaurants
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => RestaurantListScreen()),
